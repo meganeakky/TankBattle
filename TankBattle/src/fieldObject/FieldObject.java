@@ -27,9 +27,11 @@ public abstract class FieldObject extends Thread {
     @Override
     public void run() {
     	try {
-			sleep(1000);
-			toDirection();
-	        controller.setObj(this, direction);
+    		while(true) {
+    			sleep(100);
+    			toDirection();
+    	        controller.setObj(this, direction);
+    		}
 		} catch (Exception e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();

@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -51,12 +52,27 @@ public class FieldPanel extends JPanel {
 		field[1][1] = obj.getObjNum();
 	}
 
+	public FieldPanel(List<FieldObject> objs) {
+
+		try {
+			bImage = ImageIO.read(new File(IMAGE_PATH));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		for(FieldObject obj : objs) {
+			field[obj.getX()][obj.getY()] = obj.getObjNum();
+		}
+	}
+
 	public synchronized void setObj(FieldObject obj, Direction dire) {
 
 		// 受け取ったオブジェクトからオブジェクト番号を受け取る
 
 		int toX = 0;
 		int toY = 0;
+		int currentX = 0;
+		int currentY = 0;
 
 		try {
 
@@ -91,13 +107,16 @@ public class FieldPanel extends JPanel {
 				}
 
 			}
-			if (toX > 0 && toX < 9 && toY > 0 && toY < 9) {
+			if (toX == 0 || toX == 9 || toY == 0 || toY == 9) {
+				repaint(1000, currentX*100, currentY*100, 100, 100);
+			} else if (field[toX][toY] == 1 || field[toX][toY] == 2) {
+				repaint(1000, currentX*100, currentY*100, 100, 100);
+			} else {
+
 				field[toX][toY] = obj.getObjNum();
 				field[currentX][currentY] = BLANK;
 //				repaint(1000, toX*100, toY*100, toX*100 - currentX*100, toY*100 - currentY*100);
 				repaint();
-			} else {
-				repaint(1000, currentX*100, currentY*100, 100, 100);
 			}
 
 			// その番号を2次元配列から探す

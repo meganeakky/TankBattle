@@ -1,16 +1,25 @@
 package control;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import field.FieldPanel;
 import field.GameFrame;
+import fieldObject.FieldObject;
 import fieldObject.Tank;
 
 public class Starter {
 
 	public static void main(String[] args) {
 
+		List<FieldObject> playerList = new ArrayList<>();
+
 		TankBattleController controller = TankBattleController.getInstance();
 		Tank tank = new Tank(CommonData.PLAYER1_POINT, CommonData.PLAYER1_POINT, 1);
-		FieldPanel panel = new FieldPanel(tank);
+		playerList.add(tank);
+		Tank tank2 = new Tank(CommonData.PLAYER2_POINT, CommonData.PLAYER2_POINT, 2);
+		playerList.add(tank2);
+		FieldPanel panel = new FieldPanel(playerList);
 		GameFrame frame = new GameFrame(panel);
 		controller.setPanel(panel);
 
@@ -18,5 +27,6 @@ public class Starter {
 
 
 		tank.start();
+		tank2.start();
 	}
 }

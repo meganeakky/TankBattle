@@ -158,6 +158,26 @@ public class FieldPanel extends JPanel {
 
 	}
 
+
+	public boolean seachObj(FieldObject obj, Direction d) {
+		boolean shot = false;
+		for(int x = 0; x < field.length; x++) {
+			for(int y = 0; y < field[x].length; y++) {
+				if(field[x][y] == obj.getObjNum()) {
+					switch(d) {
+					case NORTH:
+						for(int n = 1; n < 4; n++) {
+							if((y - n) > 0 && field[x][y - n] > 0 && field[x][y - n] > 5) {
+								shot = true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return shot;
+	}
+
 	public Map<Direction, Integer> watchFieldReport(Point point) {
 		Map<Direction, Integer> aroundMap = new HashMap<>();
 

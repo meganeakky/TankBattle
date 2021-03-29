@@ -9,8 +9,8 @@ public abstract class FieldObject extends Thread {
     private int objNum;
     protected Direction direction;
 
-    private int x;
-    private int y;
+    protected int x;
+    protected int y;
 
 
     public FieldObject(int x, int y, int objNum) {
@@ -42,22 +42,9 @@ public abstract class FieldObject extends Thread {
     }
 
 
-    abstract void toDirection();
+    abstract Direction toDirection();
 
 
-    @Override
-    public void run() {
-    	try {
-    		while(true) {
-    			sleep(100);
-    			toDirection();
-    	        controller.setObj(this, direction);
-    		}
-		} catch (Exception e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
 
-    }
 
 }

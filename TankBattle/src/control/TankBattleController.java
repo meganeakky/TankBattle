@@ -5,6 +5,7 @@ import java.util.Map;
 import field.FieldPanel;
 import fieldObject.FieldObject;
 import fieldObject.Point;
+import fieldObject.Tank;
 
 public class TankBattleController {
 
@@ -32,8 +33,16 @@ public class TankBattleController {
 
 	}
 
+	public boolean seach(Tank obj, Direction direction) {
+		return panel.seachObj(obj, direction);
+	}
+
 	public void setPanel(FieldPanel panel) {
 		this.panel = panel;
 	}
 
+	public void shotBullet() {
+		
+	}
+	
 }

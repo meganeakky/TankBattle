@@ -4,7 +4,6 @@ import java.util.Map;
 
 import field.FieldPanel;
 import fieldObject.FieldObject;
-import fieldObject.Point;
 import fieldObject.Tank;
 
 public class TankBattleController {
@@ -28,8 +27,8 @@ public class TankBattleController {
 
 	}
 
-	public synchronized Map<Direction, Integer> aroundReport(Point point) {
-		return panel.watchFieldReport(point);
+	public synchronized Map<Direction, Boolean> aroundReport(FieldObject obj) {
+		return panel.watchFieldReport(obj);
 
 	}
 
@@ -41,8 +40,6 @@ public class TankBattleController {
 		this.panel = panel;
 	}
 
-	public void shotBullet() {
-		
-	}
-	
+
+
 }

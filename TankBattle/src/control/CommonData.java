@@ -7,6 +7,7 @@ public class CommonData {
 	public static final String[] PLAYERNAME = {"player1","player2","player3","player4"};
 	public static final int PLAYER1_POINT = 1;
 	public static final int PLAYER2_POINT = 8;
+	public static final int BULLETNUM = 5;
 
 
 }

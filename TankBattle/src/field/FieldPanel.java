@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 
 import control.Direction;
 import fieldObject.FieldObject;
-import fieldObject.Point;
 
 public class FieldPanel extends JPanel {
 
@@ -60,7 +59,7 @@ public class FieldPanel extends JPanel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		for(FieldObject obj : objs) {
+		for (FieldObject obj : objs) {
 			field[obj.getX()][obj.getY()] = obj.getObjNum();
 		}
 	}
@@ -108,14 +107,14 @@ public class FieldPanel extends JPanel {
 
 			}
 			if (toX == 0 || toX == 9 || toY == 0 || toY == 9) {
-				repaint(1000, currentX*100, currentY*100, 100, 100);
+				repaint(1000, currentX * 100, currentY * 100, 100, 100);
 			} else if (field[toX][toY] == 1 || field[toX][toY] == 2) {
-				repaint(1000, currentX*100, currentY*100, 100, 100);
+				repaint(1000, currentX * 100, currentY * 100, 100, 100);
 			} else {
 
 				field[toX][toY] = obj.getObjNum();
 				field[currentX][currentY] = BLANK;
-//				repaint(1000, toX*100, toY*100, toX*100 - currentX*100, toY*100 - currentY*100);
+				//				repaint(1000, toX*100, toY*100, toX*100 - currentX*100, toY*100 - currentY*100);
 				repaint();
 			}
 
@@ -149,6 +148,11 @@ public class FieldPanel extends JPanel {
 					g.fillRect(x * 100, y * 100, 100, 100);
 					break;
 
+				case 5:
+					g.setColor(Color.RED);
+					g.fillOval(x * 100, y * 100, 100, 100);
+					break;
+
 				default:
 					break;
 				}
@@ -158,16 +162,15 @@ public class FieldPanel extends JPanel {
 
 	}
 
-
 	public boolean seachObj(FieldObject obj, Direction d) {
 		boolean shot = false;
-		for(int x = 0; x < field.length; x++) {
-			for(int y = 0; y < field[x].length; y++) {
-				if(field[x][y] == obj.getObjNum()) {
-					switch(d) {
+		for (int x = 0; x < field.length; x++) {
+			for (int y = 0; y < field[x].length; y++) {
+				if (field[x][y] == obj.getObjNum()) {
+					switch (d) {
 					case NORTH:
-						for(int n = 1; n < 4; n++) {
-							if((y - n) > 0 && field[x][y - n] > 0 && field[x][y - n] > 5) {
+						for (int n = 1; n < 4; n++) {
+							if ((y - n) > 0 && field[x][y - n] > 0 && field[x][y - n] > 5) {
 								shot = true;
 							}
 						}
@@ -178,13 +181,43 @@ public class FieldPanel extends JPanel {
 		return shot;
 	}
 
-	public Map<Direction, Integer> watchFieldReport(Point point) {
-		Map<Direction, Integer> aroundMap = new HashMap<>();
+	public Map<Direction, Boolean> watchFieldReport(FieldObject obj) {
+		Map<Direction, Boolean> aroundMap = new HashMap<>();
 
-		aroundMap.put(Direction.SOUTH, field[point.getX()][point.getY() - 1]);
-		aroundMap.put(Direction.SOUTH, field[point.getX()][point.getY() + 1]);
-		aroundMap.put(Direction.EAST, field[point.getX() + 1][point.getY()]);
-		aroundMap.put(Direction.WEST, field[point.getX() - 1][point.getY()]);
+		boolean isTank = false;
+		for (int x = 0; x < field.length; x++) {
+			for (int y = 0; y < field[x].length; y++) {
+				if (field[x][y] == obj.getObjNum()) {
+					for (int n = 1; n < 4; n++) {
+						if ((x + n) < 9 && field[x + n][y] > 0 && field[x + n][y] < 5) {
+							aroundMap.put(Direction.EAST, true);
+							isTank = true;
+							break;
+						} else if ((x - n) > 0 && field[x - n][y] > 0 && field[x - n][y] < 5) {
+							aroundMap.put(Direction.WEST, true);
+							isTank = true;
+							break;
+						} else if ((y + n) < 9 && field[x][y + n] > 0 && field[x][y + n] < 5) {
+							aroundMap.put(Direction.SOUTH, true);
+							isTank = true;
+							break;
+						} else if ((y - n) > 0 && field[x][y - n] > 0 && field[x][y - n] < 5) {
+							aroundMap.put(Direction.NORTH, true);
+							isTank = true;
+							break;
+						}
+					}
+				}
+			}
+		}
+		if (!isTank) {
+			aroundMap.put(Direction.SOUTH, false);
+			aroundMap.put(Direction.SOUTH, false);
+			aroundMap.put(Direction.EAST, false);
+			aroundMap.put(Direction.WEST, false);
+		}
+
+
 		return aroundMap;
 	}
 

@@ -1,5 +1,7 @@
 package fieldObject;
 
+import java.util.Map;
+
 import control.Direction;
 
 public class Tank extends FieldObject {
@@ -14,25 +16,26 @@ public class Tank extends FieldObject {
 
 
 	@Override
-	protected Direction toDirection() {
+	protected Direction selectDirection() {
 		return Direction.getRandom();
+	}
+
+	private Map<Direction, Boolean> seachAround(){
+		return controller.aroundReport(this);
 	}
 
 
 
-	private Direction searchEnemy() {
-		return Direction.getRandom();
-
-	}
 
     @Override
     public void run() {
     	try {
     		while(true) {
     			sleep(100);
-
     			// 索敵を表す　見つかればBulletを発射 見つからなければ移動をする
-    			seachDirection = searchEnemy();
+//    			seachDirection = selectDirection();
+
+
     			if(controller.seach(this, seachDirection)) {
     				switch (seachDirection) {
 					case NORTH:
@@ -51,14 +54,14 @@ public class Tank extends FieldObject {
 						x--;
 						break;
 
-
 					default:
 						break;
 					}
     				Bullet bullet = new Bullet(seachDirection, x, y);
     				controller.setObj(bullet, seachDirection);
+    				bullet.run();
     			} else {
-    				controller.setObj(this, toDirection());
+    				super.run();
     			}
     		}
 		} catch (Exception e) {

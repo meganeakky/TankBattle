@@ -184,38 +184,36 @@ public class FieldPanel extends JPanel {
 	public Map<Direction, Boolean> watchFieldReport(FieldObject obj) {
 		Map<Direction, Boolean> aroundMap = new HashMap<>();
 
-		boolean isTank = false;
+		boolean tankInEast = false;
+		boolean tankInWest = false;
+		boolean tankInNorth = false;
+		boolean tankInSouth = false;
+
 		for (int x = 0; x < field.length; x++) {
 			for (int y = 0; y < field[x].length; y++) {
 				if (field[x][y] == obj.getObjNum()) {
 					for (int n = 1; n < 4; n++) {
 						if ((x + n) < 9 && field[x + n][y] > 0 && field[x + n][y] < 5) {
-							aroundMap.put(Direction.EAST, true);
-							isTank = true;
+							tankInEast = true;
 							break;
 						} else if ((x - n) > 0 && field[x - n][y] > 0 && field[x - n][y] < 5) {
-							aroundMap.put(Direction.WEST, true);
-							isTank = true;
+							tankInWest = true;
 							break;
 						} else if ((y + n) < 9 && field[x][y + n] > 0 && field[x][y + n] < 5) {
-							aroundMap.put(Direction.SOUTH, true);
-							isTank = true;
+							tankInSouth = true;
 							break;
 						} else if ((y - n) > 0 && field[x][y - n] > 0 && field[x][y - n] < 5) {
-							aroundMap.put(Direction.NORTH, true);
-							isTank = true;
+							tankInNorth = true;
 							break;
 						}
 					}
 				}
 			}
 		}
-		if (!isTank) {
-			aroundMap.put(Direction.SOUTH, false);
-			aroundMap.put(Direction.SOUTH, false);
-			aroundMap.put(Direction.EAST, false);
-			aroundMap.put(Direction.WEST, false);
-		}
+		aroundMap.put(Direction.EAST, tankInEast);
+		aroundMap.put(Direction.WEST, tankInWest);
+		aroundMap.put(Direction.NORTH, tankInNorth);
+		aroundMap.put(Direction.SOUTH, tankInSouth);
 
 
 		return aroundMap;

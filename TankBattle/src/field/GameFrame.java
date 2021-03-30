@@ -1,10 +1,7 @@
 package field;
 
-import java.util.Map;
-
 import javax.swing.JFrame;
 
-import control.Direction;
 import fieldObject.FieldObject;
 import fieldObject.Point;
 
@@ -38,9 +35,9 @@ public class GameFrame extends JFrame {
 
 	}
 
-	public Map<Direction, Integer> watchField(Point point, FieldObject obj){
-		return panel.watchFieldReport(point);
-	}
+//	public Map<Direction, Integer> watchField(Point point, FieldObject obj){
+//		return panel.watchFieldReport(point);
+//	}
 
 
 

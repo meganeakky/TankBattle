@@ -1,10 +1,16 @@
 package fieldObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import control.Direction;
 
 public class Tank extends FieldObject {
+
+	Map<Direction, Boolean> aroundMap = new HashMap<>();
 
 
 	private Direction seachDirection;
@@ -34,9 +40,19 @@ public class Tank extends FieldObject {
     			sleep(100);
     			// 索敵を表す　見つかればBulletを発射 見つからなければ移動をする
 //    			seachDirection = selectDirection();
+    			aroundMap = seachAround();
+
+    			List<Direction> trueDirectionList = new ArrayList<>();
+
+    			for(Direction d : aroundMap.keySet()) {
+    				if(aroundMap.get(d)) trueDirectionList.add(d);
+    			}
 
 
-    			if(controller.seach(this, seachDirection)) {
+//    			if(controller.seach(this, seachDirection)) {
+    			if(trueDirectionList.size() > 0) {
+        			int index = new Random().nextInt(trueDirectionList.size());
+        			seachDirection = trueDirectionList.get(index);
     				switch (seachDirection) {
 					case NORTH:
 						y--;
@@ -61,7 +77,7 @@ public class Tank extends FieldObject {
     				controller.setObj(bullet, seachDirection);
     				bullet.run();
     			} else {
-    				super.run();
+    				super.commonThreadMove();
     			}
     		}
 		} catch (Exception e) {

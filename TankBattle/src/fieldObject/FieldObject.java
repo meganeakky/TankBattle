@@ -32,8 +32,7 @@ public abstract class FieldObject extends Thread {
 
 	abstract Direction selectDirection();
 
-	@Override
-	public void run() {
+	protected void commonThreadMove() {
 		try {
 			while (true) {
 				sleep(100);
@@ -43,6 +42,11 @@ public abstract class FieldObject extends Thread {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void run() {
+		commonThreadMove();
 	}
 
 }

@@ -2,12 +2,10 @@ package field;
 
 import javax.swing.JFrame;
 
-import fieldObject.FieldObject;
-import fieldObject.Point;
-
-/*
- * Frameの役割とコントローラーの役割を持つ
- * FieldObjectのパラメーターを表示するなどを行う
+/**
+ * Panelを表示させるFrame
+ * @author RyotaIwasaki
+ *
  */
 public class GameFrame extends JFrame {
 
@@ -24,21 +22,8 @@ public class GameFrame extends JFrame {
 		setSize(FRAME_LENGTH, FRAME_LENGTH);
 		setLocationRelativeTo(null);
 		setResizable(false);
-
 		setVisible(true);
 
-
 	}
-
-
-	public void setPanelObj(Point point, FieldObject obj) {
-
-	}
-
-//	public Map<Direction, Integer> watchField(Point point, FieldObject obj){
-//		return panel.watchFieldReport(point);
-//	}
-
-
 
 }

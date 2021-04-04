@@ -8,6 +8,14 @@ import field.GameFrame;
 import fieldObject.FieldObject;
 import fieldObject.Tank;
 
+/**
+ * TankBattleの最初に動くクラス
+ * Tank、フレーム、パネル、コントローラーの
+ * インスタンスを生成する
+ * Thread：Tankの実行
+ * @author RyotaIwasaki
+ *
+ */
 public class Starter {
 
 	public static void main(String[] args) {
@@ -22,9 +30,6 @@ public class Starter {
 		FieldPanel panel = new FieldPanel(playerList);
 		GameFrame frame = new GameFrame(panel);
 		controller.setPanel(panel);
-
-
-
 
 		tank.start();
 		tank2.start();

@@ -2,21 +2,32 @@ package field;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import control.Direction;
 import fieldObject.FieldObject;
 
+/**
+ * TankBattleのフィールドを表すクラス
+ * フィールドの大きさを二次元配列で表現しており
+ * 各メソッドによって整数を動かすことで
+ * 各オブジェクトの動きを表現する
+ * @author RyotaIwasaki
+ *
+ */
 public class FieldPanel extends JPanel {
 
+	/*
+	 *  フィールドの座標を表す二次元配列
+	 *  0:空
+	 *  1～4:Tank(予定)
+	 *  5:Bullet
+	 *  9:壁
+	 */
 	private int[][] field = {
 			// 8 * 8の升目0は空、1が戦車、2が砲弾を表す
 			{ 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 },
@@ -35,35 +46,26 @@ public class FieldPanel extends JPanel {
 	private static final int PANELSIZE = 1000;
 	private static final String IMAGE_PATH = "C:/Users/akkym/OneDrive/画像/Java/TankBattle/Resized/TankImage.jpg";
 
-	private BufferedImage bImage = null;
-	private int currentX = 0;
-	private int currentY = 0;
-	private Image tankImage;
 
-	public FieldPanel(FieldObject obj) {
-
-		try {
-			bImage = ImageIO.read(new File(IMAGE_PATH));
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		field[1][1] = obj.getObjNum();
-	}
-
+	/**
+	 * コンストラクタ
+	 * 初期化時にフィールド内で動かすＴａｎｋを設定する
+	 * @param objs Panelの初期化時に入れておきたいTankのList
+	 */
 	public FieldPanel(List<FieldObject> objs) {
 
-		try {
-			bImage = ImageIO.read(new File(IMAGE_PATH));
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		for (FieldObject obj : objs) {
 			field[obj.getX()][obj.getY()] = obj.getObjNum();
 		}
 	}
 
+	/**
+	 * field内から受け取ったオブジェクト(正確にはオブジェクト番号)を探し、
+	 * 受け取った方向に動かす。
+	 * 動かした先に壁、もしくはほかのオブジェクトが存在すれば動かさない
+	 * @param obj 動かしたいオブジェクト
+	 * @param dire 動かしたい方向
+	 */
 	public synchronized void setObj(FieldObject obj, Direction dire) {
 
 		// 受け取ったオブジェクトからオブジェクト番号を受け取る
@@ -126,6 +128,12 @@ public class FieldPanel extends JPanel {
 		}
 	}
 
+
+	/**
+	 * 描画を表すメソッド
+	 * Field内の整数に応じで色・形を変化させる
+	 *
+	 */
 	public void paint(Graphics g) {
 		super.paint(g);
 
@@ -133,21 +141,25 @@ public class FieldPanel extends JPanel {
 			for (int y = 0; y < field[x].length; y++) {
 
 				switch (field[x][y]) {
+				// 壁
 				case 9:
 					g.setColor(Color.BLACK);
 					g.fillRect(x * 100, y * 100, 100, 100);
 					break;
 
+				// Tankプレイヤー1
 				case 1:
 					g.setColor(Color.GREEN);
 					g.fillRect(x * 100, y * 100, 100, 100);
 					break;
 
+				// Tank プレイヤー2
 				case 2:
 					g.setColor(Color.ORANGE);
 					g.fillRect(x * 100, y * 100, 100, 100);
 					break;
 
+				// Bullet
 				case 5:
 					g.setColor(Color.RED);
 					g.fillOval(x * 100, y * 100, 100, 100);
@@ -159,29 +171,17 @@ public class FieldPanel extends JPanel {
 
 			}
 		}
-
 	}
 
-	public boolean seachObj(FieldObject obj, Direction d) {
-		boolean shot = false;
-		for (int x = 0; x < field.length; x++) {
-			for (int y = 0; y < field[x].length; y++) {
-				if (field[x][y] == obj.getObjNum()) {
-					switch (d) {
-					case NORTH:
-						for (int n = 1; n < 4; n++) {
-							if ((y - n) > 0 && field[x][y - n] > 0 && field[x][y - n] > 5) {
-								shot = true;
-							}
-						}
-					}
-				}
-			}
-		}
-		return shot;
-	}
-
-	public Map<Direction, Boolean> watchFieldReport(FieldObject obj) {
+	/**
+	 * 受け取ったオブジェクトがField内の度の座標にいるか確認し
+	 * そのオブジェクトの上下左右3マスの中に別のオブジェクトが存在するか判定
+	 * 結果を戻り値として変えす
+	 * @param obj FieldObjectを継承したオブジェクト
+	 * @return aroundMap 	オブジェクトの上下左右に別オブジェクトが存在するかの判定結果
+	 * 						方向をキー、Boolean値をバリューとしたMap
+	 */
+	public synchronized Map<Direction, Boolean> watchFieldReport(FieldObject obj) {
 		Map<Direction, Boolean> aroundMap = new HashMap<>();
 
 		boolean tankInEast = false;
@@ -189,22 +189,24 @@ public class FieldPanel extends JPanel {
 		boolean tankInNorth = false;
 		boolean tankInSouth = false;
 
+		// オブジェクトの座標探し
 		for (int x = 0; x < field.length; x++) {
 			for (int y = 0; y < field[x].length; y++) {
 				if (field[x][y] == obj.getObjNum()) {
+
+					// 上下左右3マスずつ別オブジェクトの存在を判定
 					for (int n = 1; n < 4; n++) {
 						if ((x + n) < 9 && field[x + n][y] > 0 && field[x + n][y] < 5) {
 							tankInEast = true;
-							break;
-						} else if ((x - n) > 0 && field[x - n][y] > 0 && field[x - n][y] < 5) {
+						}
+						if ((x - n) > 0 && field[x - n][y] > 0 && field[x - n][y] < 5) {
 							tankInWest = true;
-							break;
-						} else if ((y + n) < 9 && field[x][y + n] > 0 && field[x][y + n] < 5) {
+						}
+						if ((y + n) < 9 && field[x][y + n] > 0 && field[x][y + n] < 5) {
 							tankInSouth = true;
-							break;
-						} else if ((y - n) > 0 && field[x][y - n] > 0 && field[x][y - n] < 5) {
+						}
+						if ((y - n) > 0 && field[x][y - n] > 0 && field[x][y - n] < 5) {
 							tankInNorth = true;
-							break;
 						}
 					}
 				}
@@ -214,7 +216,6 @@ public class FieldPanel extends JPanel {
 		aroundMap.put(Direction.WEST, tankInWest);
 		aroundMap.put(Direction.NORTH, tankInNorth);
 		aroundMap.put(Direction.SOUTH, tankInSouth);
-
 
 		return aroundMap;
 	}

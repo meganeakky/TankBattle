@@ -4,8 +4,14 @@ import java.util.Map;
 
 import field.FieldPanel;
 import fieldObject.FieldObject;
-import fieldObject.Tank;
 
+/**
+ * コントローラーを表すクラス
+ * 各クラスの連携を行う
+ *
+ * @author RyotaIwasaki
+ *
+ */
 public class TankBattleController {
 
 	private static FieldPanel panel;
@@ -16,7 +22,15 @@ public class TankBattleController {
 		return new TankBattleController();
 	}
 
-	public void setObj(FieldObject obj, Direction d) {
+
+	/**
+	 * Panelに対して受け取ったオブジェクト(FieldObjectを継承したもの)と
+	 * そのオブジェクトが進みたい方向を渡す
+	 *
+	 * @param obj FieldObjectを継承したオブジェクト
+	 * @param d オブジェクトが進みたい方向
+	 */
+	synchronized public void setObj(FieldObject obj, Direction d) {
 		try {
 			panel.setObj(obj, d);
 		} catch (Exception e) {
@@ -27,15 +41,23 @@ public class TankBattleController {
 
 	}
 
+	/**
+	 * FieldObjectから受け取ったインスタンスをPanelに渡し、
+	 * 周囲の情報を受け取る
+	 * 呼び出し側に周囲の情報を返す
+	 * @param obj FieldObjectを継承したオブジェクト。主にTank
+	 * @return オブジェクトの周囲の情報をMapとして呼び出し元に返す
+	 */
 	public synchronized Map<Direction, Boolean> aroundReport(FieldObject obj) {
 		return panel.watchFieldReport(obj);
 
 	}
 
-	public boolean seach(Tank obj, Direction direction) {
-		return panel.seachObj(obj, direction);
-	}
 
+	/**
+	 *  Controllerで扱うPanel(フィールド)を設定する
+	 * @param panel Controllerで扱うPanel(フィールド)
+	 */
 	public void setPanel(FieldPanel panel) {
 		this.panel = panel;
 	}

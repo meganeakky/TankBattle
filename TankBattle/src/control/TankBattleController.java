@@ -62,6 +62,10 @@ public class TankBattleController {
 		this.panel = panel;
 	}
 
+	public synchronized void putObjct(FieldObject obj) {
+		panel.putObjct(obj);
+	}
+
 
 
 }

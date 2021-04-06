@@ -43,9 +43,6 @@ public class FieldPanel extends JPanel {
 	};
 
 	private static final int BLANK = 0;
-	private static final int PANELSIZE = 1000;
-	private static final String IMAGE_PATH = "C:/Users/akkym/OneDrive/画像/Java/TankBattle/Resized/TankImage.jpg";
-
 
 	/**
 	 * コンストラクタ
@@ -57,6 +54,10 @@ public class FieldPanel extends JPanel {
 		for (FieldObject obj : objs) {
 			field[obj.getX()][obj.getY()] = obj.getObjNum();
 		}
+	}
+
+	public synchronized void putObjct(FieldObject obj) {
+		field[obj.getX()][obj.getY()] = obj.getObjNum();
 	}
 
 	/**
@@ -76,7 +77,6 @@ public class FieldPanel extends JPanel {
 		int currentY = 0;
 
 		try {
-
 			A: for (int x = 0; x < field.length; x++) {
 				for (int y = 0; y < field[x].length; y++) {
 					if (field[x][y] == obj.getObjNum()) {
@@ -127,7 +127,6 @@ public class FieldPanel extends JPanel {
 			e.printStackTrace();
 		}
 	}
-
 
 	/**
 	 * 描画を表すメソッド

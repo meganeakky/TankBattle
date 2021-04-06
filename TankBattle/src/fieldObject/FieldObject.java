@@ -19,7 +19,6 @@ public abstract class FieldObject extends Thread {
 	protected int x;
 	protected int y;
 
-
 	public FieldObject(int x, int y, int objNum) {
 		controller = TankBattleController.getInstance();
 		this.objNum = objNum;
@@ -32,7 +31,7 @@ public abstract class FieldObject extends Thread {
 	 * @return X座標を表す整数
 	 */
 	public int getX() {
-		return x;
+		return this.x;
 	}
 
 	/**
@@ -40,7 +39,7 @@ public abstract class FieldObject extends Thread {
 	 * @return Y座標を表す整数
 	 */
 	public int getY() {
-		return y;
+		return this.y;
 	}
 
 	/**
@@ -63,15 +62,9 @@ public abstract class FieldObject extends Thread {
 	 * Panelに反映させる
 	 */
 	protected void commonThreadMove() {
-		try {
-			while (true) {
-				sleep(100);
-				controller.setObj(this, selectDirection());
-			}
-		} catch (Exception e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
+
+		controller.setObj(this, selectDirection());
+
 	}
 
 	/**
@@ -79,7 +72,14 @@ public abstract class FieldObject extends Thread {
 	 */
 	@Override
 	public void run() {
-		commonThreadMove();
-	}
+		try {
+			while (true) {
+				sleep(100);
+				commonThreadMove();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
+	}
 }

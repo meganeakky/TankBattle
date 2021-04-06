@@ -50,7 +50,8 @@ public class Tank extends FieldObject {
     @Override
     public void run() {
     	try {
-    		while(true) {
+    		boolean isMove = true;
+    		while(isMove) {
     			sleep(100);
     			// 索敵を表す 見つかればBulletを発射 見つからなければ移動をする
 //    			seachDirection = selectDirection();
@@ -61,7 +62,6 @@ public class Tank extends FieldObject {
     			for(Direction d : aroundMap.keySet()) {
     				if(aroundMap.get(d)) trueDirectionList.add(d);
     			}
-
 
 //    			if(controller.seach(this, seachDirection)) {
     			if(trueDirectionList.size() > 0) {
@@ -88,7 +88,7 @@ public class Tank extends FieldObject {
 						break;
 					}
     				Bullet bullet = new Bullet(seachDirection, x, y);
-    				controller.setObj(bullet, seachDirection);
+    				controller.putObjct(bullet);
     				bullet.run();
     			} else {
     				/*

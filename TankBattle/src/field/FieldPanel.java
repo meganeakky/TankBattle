@@ -8,7 +8,9 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import control.CommonData;
 import control.Direction;
+import fieldObject.Bullet;
 import fieldObject.FieldObject;
 
 /**
@@ -52,12 +54,18 @@ public class FieldPanel extends JPanel {
 	public FieldPanel(List<FieldObject> objs) {
 
 		for (FieldObject obj : objs) {
-			field[obj.getX()][obj.getY()] = obj.getObjNum();
-		}
-	}
+			switch (obj.getObjNum()) {
+			case CommonData.PLAYER1_NUM:
+				field[CommonData.PLAYER1_POINT][CommonData.PLAYER1_POINT] = obj.getObjNum();
+				break;
+			case CommonData.PLAYER2_NUM:
+				field[CommonData.PLAYER2_POINT][CommonData.PLAYER2_POINT] = obj.getObjNum();
+				break;
 
-	public synchronized void putObjct(FieldObject obj) {
-		field[obj.getX()][obj.getY()] = obj.getObjNum();
+			default:
+				break;
+			}
+		}
 	}
 
 	/**
@@ -67,10 +75,10 @@ public class FieldPanel extends JPanel {
 	 * @param obj 動かしたいオブジェクト
 	 * @param dire 動かしたい方向
 	 */
-	public synchronized void setObj(FieldObject obj, Direction dire) {
+	public synchronized boolean setObj(FieldObject obj, Direction dire) {
 
 		// 受け取ったオブジェクトからオブジェクト番号を受け取る
-
+		boolean isDamage = false;
 		int toX = 0;
 		int toY = 0;
 		int currentX = 0;
@@ -110,13 +118,24 @@ public class FieldPanel extends JPanel {
 			}
 			if (toX == 0 || toX == 9 || toY == 0 || toY == 9) {
 				repaint(1000, currentX * 100, currentY * 100, 100, 100);
-			} else if (field[toX][toY] == 1 || field[toX][toY] == 2) {
-				repaint(1000, currentX * 100, currentY * 100, 100, 100);
+			} else if (field[toX][toY] == 1 || field[toX][toY] == 2 || field[toX][toY] == 5) {
+				if (obj instanceof Bullet) {
+					// objNumに応じてTankに対してダメージの宣言を行う
+
+					isDamage = true;
+
+				} else if (field[toX][toY] == 5) {
+					// Bullet同士を消滅させる
+
+				} else {
+					repaint(1000, currentX * 100, currentY * 100, 100, 100);
+				}
+
 			} else {
 
 				field[toX][toY] = obj.getObjNum();
 				field[currentX][currentY] = BLANK;
-				//				repaint(1000, toX*100, toY*100, toX*100 - currentX*100, toY*100 - currentY*100);
+				//repaint(1000, toX*100, toY*100, toX*100 - currentX*100, toY*100 - currentY*100);
 				repaint();
 			}
 
@@ -126,6 +145,8 @@ public class FieldPanel extends JPanel {
 			System.out.println(e.getMessage() + "\r\n\r\n");
 			e.printStackTrace();
 		}
+		return isDamage;
+
 	}
 
 	/**

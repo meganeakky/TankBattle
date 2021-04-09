@@ -15,8 +15,8 @@ public class Bullet extends FieldObject {
 	// 一直線に飛ぶ方向
 	private final Direction DIRECTION;
 
-	public Bullet(Direction direction, int x, int y) {
-		super(x, y, CommonData.BULLETNUM);
+	public Bullet(Direction direction) {
+		super(CommonData.BULLETNUM);
 		this.DIRECTION = direction;
 	}
 

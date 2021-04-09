@@ -13,41 +13,40 @@ import control.TankBattleController;
  */
 public abstract class FieldObject extends Thread {
 
-	TankBattleController controller;
-	private int objNum;
+	protected static final TankBattleController CONTROLLER = TankBattleController.getInstance();
+	private final int OBJ_NUM;
 
 	protected int x;
 	protected int y;
 
-	public FieldObject(int x, int y, int objNum) {
-		controller = TankBattleController.getInstance();
-		this.objNum = objNum;
-		this.x = x;
-		this.y = y;
+	public FieldObject(int objNum) {
+		this.OBJ_NUM = objNum;
+//		this.x = x;
+//		this.y = y;
 	}
 
 	/**
 	 * オブジェクトのX座標を受け取るためのメソッド
 	 * @return X座標を表す整数
 	 */
-	public int getX() {
-		return this.x;
-	}
+//	public int getX() {
+//		return this.x;
+//	}
 
 	/**
 	 * オブジェクトのY座標を受け取るためのメソッド
 	 * @return Y座標を表す整数
 	 */
-	public int getY() {
-		return this.y;
-	}
+//	public int getY() {
+//		return this.y;
+//	}
 
 	/**
 	 * オブジェクト番号を受け取るためのメソッド
 	 * @return
 	 */
 	public int getObjNum() {
-		return this.objNum;
+		return this.OBJ_NUM;
 	}
 
 	/**
@@ -63,7 +62,7 @@ public abstract class FieldObject extends Thread {
 	 */
 	protected void commonThreadMove() {
 
-		controller.setObj(this, selectDirection());
+		CONTROLLER.setObj(this, selectDirection());
 
 	}
 

@@ -23,9 +23,9 @@ public class Starter {
 		List<FieldObject> playerList = new ArrayList<>();
 
 		TankBattleController controller = TankBattleController.getInstance();
-		Tank tank = new Tank(CommonData.PLAYER1_POINT, CommonData.PLAYER1_POINT, 1);
+		Tank tank = new Tank(CommonData.PLAYER1_NUM);
 		playerList.add(tank);
-		Tank tank2 = new Tank(CommonData.PLAYER2_POINT, CommonData.PLAYER2_POINT, 2);
+		Tank tank2 = new Tank(CommonData.PLAYER2_NUM);
 		playerList.add(tank2);
 		FieldPanel panel = new FieldPanel(playerList);
 		GameFrame frame = new GameFrame(panel);

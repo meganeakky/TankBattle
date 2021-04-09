@@ -15,11 +15,12 @@ import fieldObject.FieldObject;
 public class TankBattleController {
 
 	private static FieldPanel panel;
+	private static final TankBattleController CONTROLLER = new TankBattleController();
 	private TankBattleController() {}
 
 
 	public static TankBattleController getInstance() {
-		return new TankBattleController();
+		return CONTROLLER;
 	}
 
 
@@ -62,9 +63,9 @@ public class TankBattleController {
 		this.panel = panel;
 	}
 
-	public synchronized void putObjct(FieldObject obj) {
-		panel.putObjct(obj);
-	}
+//	public synchronized void putObjct(FieldObject obj) {
+//		panel.putObjct(obj);
+//	}
 
 
 

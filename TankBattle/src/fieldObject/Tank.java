@@ -16,14 +16,22 @@ import control.Direction;
 public class Tank extends FieldObject {
 
 	private Map<Direction, Boolean> aroundMap = new HashMap<>();
+	private int life = 3;
 
 	// 進みたい(砲弾を撃ちたい)方向
 	private Direction seachDirection;
 
-	public Tank(int x, int y, int objNum) {
-		super(x, y, objNum);
+	public Tank(int objNum) {
+		super(objNum);
 	}
 
+	public int getLife() {
+		return this.life;
+	}
+
+	public void damage() {
+		this.life--;
+	}
 
 	/**
 	 * FieldObjectからオーバーライド
@@ -40,7 +48,7 @@ public class Tank extends FieldObject {
 	 * @return 周囲の情報が入ったMap
 	 */
 	private Map<Direction, Boolean> seachAround(){
-		return controller.aroundReport(this);
+		return CONTROLLER.aroundReport(this);
 	}
 
 	/**
@@ -87,8 +95,8 @@ public class Tank extends FieldObject {
 					default:
 						break;
 					}
-    				Bullet bullet = new Bullet(seachDirection, x, y);
-    				controller.putObjct(bullet);
+    				Bullet bullet = new Bullet(seachDirection);
+    				CONTROLLER.setObj(bullet, seachDirection);
     				bullet.run();
     			} else {
     				/*

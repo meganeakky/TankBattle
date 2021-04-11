@@ -12,6 +12,7 @@ import control.CommonData;
 import control.Direction;
 import fieldObject.Bullet;
 import fieldObject.FieldObject;
+import fieldObject.Tank;
 
 /**
  * TankBattleのフィールドを表すクラス
@@ -45,10 +46,12 @@ public class FieldPanel extends JPanel {
 	};
 
 	private static final int BLANK = 0;
+	private static Map<Integer, Boolean> damageMap = new HashMap<>();
 
 	/**
 	 * コンストラクタ
 	 * 初期化時にフィールド内で動かすＴａｎｋを設定する
+	 * ※FieldObjectを渡す必要はないのではないか。コントローラーに渡すべき？
 	 * @param objs Panelの初期化時に入れておきたいTankのList
 	 */
 	public FieldPanel(List<FieldObject> objs) {
@@ -66,6 +69,10 @@ public class FieldPanel extends JPanel {
 				break;
 			}
 		}
+		for(int i = 1; i < 5; i ++) {
+			damageMap.put(i, false);
+		}
+
 	}
 
 	/**
@@ -75,10 +82,10 @@ public class FieldPanel extends JPanel {
 	 * @param obj 動かしたいオブジェクト
 	 * @param dire 動かしたい方向
 	 */
-	public synchronized boolean setObj(FieldObject obj, Direction dire) {
+	public synchronized Map setObj(FieldObject obj, Direction dire) {
 
 		// 受け取ったオブジェクトからオブジェクト番号を受け取る
-		boolean isDamage = false;
+
 		int toX = 0;
 		int toY = 0;
 		int currentX = 0;
@@ -119,10 +126,13 @@ public class FieldPanel extends JPanel {
 			if (toX == 0 || toX == 9 || toY == 0 || toY == 9) {
 				repaint(1000, currentX * 100, currentY * 100, 100, 100);
 			} else if (field[toX][toY] == 1 || field[toX][toY] == 2 || field[toX][toY] == 5) {
-				if (obj instanceof Bullet) {
+				if (obj instanceof Tank && field[toX][toY] == 5) {
 					// objNumに応じてTankに対してダメージの宣言を行う
+					repaint(1000, currentX * 100, currentY * 100, 100, 100);
+					isDamage = false;
 
-					isDamage = true;
+				} else if (field[toX][toY] == 5) {
+					// Bullet同士を消滅させる
 
 				} else if (field[toX][toY] == 5) {
 					// Bullet同士を消滅させる
@@ -147,6 +157,40 @@ public class FieldPanel extends JPanel {
 		}
 		return isDamage;
 
+	}
+
+	public synchronized void setObj(Bullet bullet, Direction dire, Tank tank) {
+		int toX = 0;
+		int toY = 0;
+		A: for (int x = 0; x < field.length; x++) {
+			for (int y = 0; y < field[x].length; y++) {
+				if (field[x][y] == tank.getObjNum()) {
+					switch (dire) {
+
+					case NORTH:
+						toY += (y - 1);
+						toX = x;
+						break A;
+
+					case SOUTH:
+						toY += (y + 1);
+						toX = x;
+						break A;
+
+					case EAST:
+						toX += (x + 1);
+						toY = y;
+						break A;
+
+					case WEST:
+						toX += (x - 1);
+						toY = y;
+						break A;
+					}
+				}
+			}
+		}
+		field[toX][toY] = bullet.getObjNum();
 	}
 
 	/**
@@ -238,6 +282,12 @@ public class FieldPanel extends JPanel {
 		aroundMap.put(Direction.SOUTH, tankInSouth);
 
 		return aroundMap;
+	}
+
+	private void iniDamageMap(){
+		for(Integer key : damageMap.keySet()) {
+			damageMap.replace(key, false);
+		}
 	}
 
 }

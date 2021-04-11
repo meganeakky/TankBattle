@@ -96,8 +96,8 @@ public class Tank extends FieldObject {
 						break;
 					}
     				Bullet bullet = new Bullet(seachDirection);
-    				CONTROLLER.setObj(bullet, seachDirection);
-    				bullet.run();
+    				CONTROLLER.shotBullet(bullet, seachDirection, this);
+    				bullet.start();
     			} else {
     				/*
     				 *  周囲にTankが存在しなかったため

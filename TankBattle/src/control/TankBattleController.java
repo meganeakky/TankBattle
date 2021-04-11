@@ -3,7 +3,9 @@ package control;
 import java.util.Map;
 
 import field.FieldPanel;
+import fieldObject.Bullet;
 import fieldObject.FieldObject;
+import fieldObject.Tank;
 
 /**
  * コントローラーを表すクラス
@@ -68,5 +70,8 @@ public class TankBattleController {
 //	}
 
 
+	public synchronized void shotBullet(Bullet bullet, Direction dire, Tank tank) {
+		panel.setObj(bullet, dire, tank);
+	}
 
 }

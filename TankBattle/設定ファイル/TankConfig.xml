@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TankBattleConfig>
+	<Tank name="player1" offensive="9"></Tank>
+	<Tank name="player2" offensive="8"></Tank>
+	<Tank name="player3" offensive="4"></Tank>
+	<Tank name="player4" offensive="6"></Tank>
+</TankBattleConfig>

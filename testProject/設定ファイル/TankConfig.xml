@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TankConfig>
+	<Player1>
+		<Offensive>7</Offensive>
+	</Player1>
+	<Player2>
+		<Offensive>3</Offensive>
+	</Player2>
+	<Player3>
+		<Offensive>2</Offensive>
+	</Player3>
+	<Player4>
+		<Offensive>9</Offensive>
+	</Player4>
+
+</TankConfig>

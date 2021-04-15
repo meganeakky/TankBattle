@@ -82,10 +82,11 @@ public class FieldPanel extends JPanel {
 	 * @param obj 動かしたいオブジェクト
 	 * @param dire 動かしたい方向
 	 */
-	public synchronized Map setObj(FieldObject obj, Direction dire) {
+	public synchronized Map<Integer, Boolean> setObj(FieldObject obj, Direction dire) {
 
 		// 受け取ったオブジェクトからオブジェクト番号を受け取る
 
+		iniDamageMap();
 		int toX = 0;
 		int toY = 0;
 		int currentX = 0;
@@ -129,12 +130,14 @@ public class FieldPanel extends JPanel {
 				if (obj instanceof Tank && field[toX][toY] == 5) {
 					// objNumに応じてTankに対してダメージの宣言を行う
 					repaint(1000, currentX * 100, currentY * 100, 100, 100);
-					isDamage = false;
+					damageMap.replace(obj.getObjNum(), true);
 
-				} else if (field[toX][toY] == 5) {
-					// Bullet同士を消滅させる
+				} else if (obj instanceof Bullet && field[toX][toY] > 0 && field[toX][toY] < 5) {
+					// bulletが戦車に直撃
+					field[currentX][currentY] = BLANK;
+					obj.wait();
 
-				} else if (field[toX][toY] == 5) {
+				} else if (obj instanceof Bullet && field[toX][toY] == 5) {
 					// Bullet同士を消滅させる
 
 				} else {
@@ -155,7 +158,7 @@ public class FieldPanel extends JPanel {
 			System.out.println(e.getMessage() + "\r\n\r\n");
 			e.printStackTrace();
 		}
-		return isDamage;
+		return damageMap;
 
 	}
 

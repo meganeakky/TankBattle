@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TankBattleConfig>
-	<Tank name="player1" offensive="9"></Tank>
-	<Tank name="player2" offensive="8"></Tank>
-	<Tank name="player3" offensive="4"></Tank>
-	<Tank name="player4" offensive="6"></Tank>
+	<!-- <Tank name="player1" offensive="9"></Tank> -->
+	<!-- <Tank name="player2" offensive="8"></Tank> -->
+	<!-- <Tank name="player3" offensive="4"></Tank> -->
+	<!-- <Tank name="player4" offensive="6"></Tank> -->
+
+	<Tank>
+		<Name>Player1</Name>
+		<Offensive>9</Offensive>
+		<Num>1</Num>
+	</Tank>
+	<Tank>
+		<Name>Player2</Name>
+		<Offensive>8</Offensive>
+		<Num>2</Num>
+	</Tank>
+	<Tank>
+		<Name>Player3</Name>
+		<Offensive>4</Offensive>
+		<Num>3</Num>
+	</Tank>
+	<Tank>
+		<Name>Player4</Name>
+		<Offensive>6</Offensive>
+		<Num>4</Num>
+	</Tank>
+
 </TankBattleConfig>

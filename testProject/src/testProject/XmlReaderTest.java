@@ -7,15 +7,9 @@ import java.nio.file.Paths;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class XmlReaderTest {
@@ -26,11 +20,18 @@ public class XmlReaderTest {
 			FileInputStream is = new FileInputStream(Paths.get("C:/temp/TankConfig.xml").toFile());
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document document = builder.parse(is);
-			XPath xPath = XPathFactory.newInstance().newXPath();
 
-			XPathExpression expression = xPath.compile("TankBattleConfig/Tank");
+			Element element = document.getDocumentElement();
 
-			NodeList nList = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
+			while(element.getFirstChild().getNodeName().equals("Tank")) {
+
+			}
+
+//			XPath xPath = XPathFactory.newInstance().newXPath();
+
+//			XPathExpression expression = xPath.compile("TankBattleConfig/Tank");
+
+//			NodeList nList = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
 
 
 //			System.out.println("nodeName:" + element.getNodeName());
@@ -38,15 +39,15 @@ public class XmlReaderTest {
 
 //			NodeList list = element.getChildNodes();
 
-			for(int n = 0; n < nList.getLength(); n++) {
-				Element element2 = (Element)nList.item(n);
+//			for(int n = 0; n < nList.getLength(); n++) {
+//				Element element2 = (Element)nList.item(n);
+//
+//				System.out.println((n+1) + "台目");
+//				System.out.println("name:" + element2.getAttribute("name"));
+//				System.out.println("攻撃性:" + element2.getAttribute("offensive"));
+//			}
 
-				System.out.println((n+1) + "台目");
-				System.out.println("name:" + element2.getAttribute("name"));
-				System.out.println("攻撃性:" + element2.getAttribute("offensive"));
-			}
-
-		} catch (ParserConfigurationException | IOException | SAXException | XPathExpressionException e ) {
+		} catch (ParserConfigurationException | IOException | SAXException  e ) {
 			// TODO 自動生成された catch ブロック
 			System.out.println("エラーが発生");
 			e.printStackTrace();

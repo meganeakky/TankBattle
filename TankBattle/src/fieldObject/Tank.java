@@ -70,9 +70,10 @@ public class Tank extends FieldObject {
     			for(Direction d : aroundMap.keySet()) {
     				if(aroundMap.get(d)) trueDirectionList.add(d);
     			}
+    			double rand = Math.random();
 
 //    			if(controller.seach(this, seachDirection)) {
-    			if(trueDirectionList.size() > 0) {
+    			if(trueDirectionList.size() > 0 && rand > 0.4) {
         			int index = new Random().nextInt(trueDirectionList.size());
         			seachDirection = trueDirectionList.get(index);
     				switch (seachDirection) {
@@ -97,7 +98,8 @@ public class Tank extends FieldObject {
 					}
     				Bullet bullet = new Bullet(seachDirection);
     				CONTROLLER.shotBullet(bullet, seachDirection, this);
-    				bullet.start();
+    				bullet.start()
+    				;
     			} else {
     				/*
     				 *  周囲にTankが存在しなかったため

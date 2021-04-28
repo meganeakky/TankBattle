@@ -15,31 +15,51 @@ public abstract class FieldObject extends Thread {
 
 	protected static final TankBattleController CONTROLLER = TankBattleController.getInstance();
 	private final int OBJ_NUM;
+	protected boolean isMove = true;
+	private static int bulletCnt = 5;
+	protected int life;
 
 	protected int x;
 	protected int y;
 
+	// Bullet生成用
+	public FieldObject() {
+		this.OBJ_NUM = bulletCnt;
+		if(bulletCnt < 20) {
+			bulletCnt++;
+		} else {
+			bulletCnt = 5;
+		}
+	}
+
+	// Tank生成用
 	public FieldObject(int objNum) {
 		this.OBJ_NUM = objNum;
-//		this.x = x;
-//		this.y = y;
+		//		this.x = x;
+		//		this.y = y;
 	}
 
 	/**
 	 * オブジェクトのX座標を受け取るためのメソッド
 	 * @return X座標を表す整数
 	 */
-//	public int getX() {
-//		return this.x;
-//	}
+	//	public int getX() {
+	//		return this.x;
+	//	}
 
 	/**
 	 * オブジェクトのY座標を受け取るためのメソッド
 	 * @return Y座標を表す整数
 	 */
-//	public int getY() {
-//		return this.y;
-//	}
+	//	public int getY() {
+	//		return this.y;
+	//	}
+	public void damage() {
+		this.life--;
+	}
+	public int getLife() {
+		return this.life;
+	}
 
 	/**
 	 * オブジェクト番号を受け取るためのメソッド
@@ -66,19 +86,8 @@ public abstract class FieldObject extends Thread {
 
 	}
 
-	/**
-	 * Threadの動作を実行する
-	 */
-	@Override
-	public void run() {
-		try {
-			while (true) {
-				sleep(100);
-				commonThreadMove();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	public void stopObj() {
+		isMove = false;
 	}
+
 }

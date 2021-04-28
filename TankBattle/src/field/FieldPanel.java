@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import control.CommonData;
 import control.Direction;
+import control.TankBattleController;
 import fieldObject.Bullet;
 import fieldObject.FieldObject;
 import fieldObject.Tank;
@@ -45,6 +46,8 @@ public class FieldPanel extends JPanel {
 			{ 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 }
 	};
 
+	private TankBattleController controller = TankBattleController.getInstance();
+
 	private static final int BLANK = 0;
 	private static Map<Integer, Boolean> damageMap = new HashMap<>();
 
@@ -69,7 +72,7 @@ public class FieldPanel extends JPanel {
 				break;
 			}
 		}
-		for(int i = 1; i < 5; i ++) {
+		for (int i = 1; i < 5; i++) {
 			damageMap.put(i, false);
 		}
 
@@ -82,10 +85,11 @@ public class FieldPanel extends JPanel {
 	 * @param obj 動かしたいオブジェクト
 	 * @param dire 動かしたい方向
 	 */
-	public synchronized Map<Integer, Boolean> setObj(FieldObject obj, Direction dire) {
+	public synchronized int setObj(FieldObject obj, Direction dire) {
 
 		// 受け取ったオブジェクトからオブジェクト番号を受け取る
 
+		int result = 0;
 		iniDamageMap();
 		int toX = 0;
 		int toY = 0;
@@ -126,20 +130,27 @@ public class FieldPanel extends JPanel {
 			}
 			if (toX == 0 || toX == 9 || toY == 0 || toY == 9) {
 				repaint(1000, currentX * 100, currentY * 100, 100, 100);
-			} else if (field[toX][toY] == 1 || field[toX][toY] == 2 || field[toX][toY] == 5) {
-				if (obj instanceof Tank && field[toX][toY] == 5) {
+			} else if (1 <= field[toX][toY] && field[toX][toY] <= 5) {
+
+				/*
+				 * 戻り値がintだと2つのオブジェクトに同時にダメージを与えたいときにどうする？
+				 * 消すタイミングはPanelにやらせないとTankが消える
+				 */
+
+				// Tankが進む先がBulletだったら
+				if (obj instanceof Tank && field[toX][toY] >= 5 && field[toX][toY] <= 20) {
 					// objNumに応じてTankに対してダメージの宣言を行う
 					repaint(1000, currentX * 100, currentY * 100, 100, 100);
-					damageMap.replace(obj.getObjNum(), true);
-
-				} else if (obj instanceof Bullet && field[toX][toY] > 0 && field[toX][toY] < 5) {
+					result = obj.getObjNum();
+				} else if (obj instanceof Bullet && field[toX][toY] >= 1 && field[toX][toY] <= 4) {
 					// bulletが戦車に直撃
-					field[currentX][currentY] = BLANK;
-					obj.wait();
+					obj.stopObj();
+					result = field[toX][toY];
 
-				} else if (obj instanceof Bullet && field[toX][toY] == 5) {
+				} else if (obj instanceof Bullet && field[toX][toY] >= 5 && field[toX][toY] <= 20) {
 					// Bullet同士を消滅させる
-
+					obj.stopObj();
+					result = field[toX][toY];
 				} else {
 					repaint(1000, currentX * 100, currentY * 100, 100, 100);
 				}
@@ -150,6 +161,7 @@ public class FieldPanel extends JPanel {
 				field[currentX][currentY] = BLANK;
 				//repaint(1000, toX*100, toY*100, toX*100 - currentX*100, toY*100 - currentY*100);
 				repaint();
+
 			}
 
 			// その番号を2次元配列から探す
@@ -158,8 +170,7 @@ public class FieldPanel extends JPanel {
 			System.out.println(e.getMessage() + "\r\n\r\n");
 			e.printStackTrace();
 		}
-		return damageMap;
-
+		return result;
 	}
 
 	public synchronized void setObj(Bullet bullet, Direction dire, Tank tank) {
@@ -257,6 +268,7 @@ public class FieldPanel extends JPanel {
 		boolean tankInSouth = false;
 
 		// オブジェクトの座標探し
+		A:
 		for (int x = 0; x < field.length; x++) {
 			for (int y = 0; y < field[x].length; y++) {
 				if (field[x][y] == obj.getObjNum()) {
@@ -276,6 +288,7 @@ public class FieldPanel extends JPanel {
 							tankInNorth = true;
 						}
 					}
+					break A;
 				}
 			}
 		}
@@ -287,8 +300,21 @@ public class FieldPanel extends JPanel {
 		return aroundMap;
 	}
 
-	private void iniDamageMap(){
-		for(Integer key : damageMap.keySet()) {
+	public void killObj(FieldObject obj) {
+		A:
+		for (int x = 0; x < field.length; x++) {
+			for (int y = 0; y < field[x].length; y++) {
+				if (field[x][y] == obj.getObjNum()) {
+					field[x][y] = BLANK;
+					repaint();
+					break A;
+				}
+			}
+		}
+	}
+
+	private void iniDamageMap() {
+		for (Integer key : damageMap.keySet()) {
 			damageMap.replace(key, false);
 		}
 	}

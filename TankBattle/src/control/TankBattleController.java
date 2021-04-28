@@ -1,5 +1,6 @@
 package control;
 
+import java.util.List;
 import java.util.Map;
 
 import field.FieldPanel;
@@ -18,10 +19,16 @@ public class TankBattleController {
 
 	private static FieldPanel panel;
 	private static final TankBattleController CONTROLLER = new TankBattleController();
+	private static List<FieldObject> objList ;
 	private TankBattleController() {}
 
 
 	public static TankBattleController getInstance() {
+		return CONTROLLER;
+	}
+
+	public static TankBattleController getInstance(List<FieldObject> list) {
+		objList = list;
 		return CONTROLLER;
 	}
 
@@ -33,9 +40,18 @@ public class TankBattleController {
 	 * @param obj FieldObjectを継承したオブジェクト
 	 * @param d オブジェクトが進みたい方向
 	 */
-	synchronized public void setObj(FieldObject obj, Direction d) {
+	public synchronized void setObj(FieldObject obj, Direction d) {
 		try {
-			panel.setObj(obj, d);
+			int damageObj = panel.setObj(obj, d);
+			for(FieldObject object : objList) {
+				if(object.getObjNum() == damageObj) {
+					object.damage();
+					if(object.getLife() == 0) {
+						object.stopObj();
+						panel.killObj(object);
+					}
+				}
+			}
 		} catch (Exception e) {
 			System.err.println("コントローラ内でエラー");
 			System.out.println(e.getMessage() + "\r\n\r\n");
@@ -65,12 +81,18 @@ public class TankBattleController {
 		this.panel = panel;
 	}
 
-//	public synchronized void putObjct(FieldObject obj) {
-//		panel.putObjct(obj);
-//	}
 
+	public void hitBullet(int objNum) {
+		for(FieldObject obj : objList) {
+			if(obj.getObjNum() == objNum) {
+				obj.damage();
+				break;
+			}
+		}
+	}
 
 	public synchronized void shotBullet(Bullet bullet, Direction dire, Tank tank) {
+
 		panel.setObj(bullet, dire, tank);
 	}
 

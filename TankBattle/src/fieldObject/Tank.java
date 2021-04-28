@@ -16,22 +16,18 @@ import control.Direction;
 public class Tank extends FieldObject {
 
 	private Map<Direction, Boolean> aroundMap = new HashMap<>();
-	private int life = 3;
 
 	// 進みたい(砲弾を撃ちたい)方向
 	private Direction seachDirection;
 
 	public Tank(int objNum) {
 		super(objNum);
+		life = 3;
 	}
 
-	public int getLife() {
-		return this.life;
-	}
 
-	public void damage() {
-		this.life--;
-	}
+
+
 
 	/**
 	 * FieldObjectからオーバーライド
@@ -58,7 +54,6 @@ public class Tank extends FieldObject {
     @Override
     public void run() {
     	try {
-    		boolean isMove = true;
     		while(isMove) {
     			sleep(100);
     			// 索敵を表す 見つかればBulletを発射 見つからなければ移動をする
